@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 
 class API {
-  // these three are here because overpass breaks a lot so we need it to try multiple servers
+  // these three are here because overpass breaks a lot so we need it to try multiple servers and cache results to reduce load times
   static final Map<String, _CacheEntry<List<Mosque>>> _mosqueCache = {};
   static final Duration _cacheTTL = const Duration(minutes: 10);  
   static const List<String> _overpassServers = [
@@ -104,6 +104,7 @@ class API {
   }
 
   //api for all quran functions: https://quranapi.pages.dev/api/surah.json
+
   Future<List<Surah>> fetchQuranList() async {
     final url = Uri.https('quranapi.pages.dev', '/api/surah.json');
 
@@ -128,6 +129,26 @@ class API {
     }
     return surahs;
   }
+
+  Future<Surah> fetchSurah(int surahNumber) async {
+  final url = Uri.https('quranapi.pages.dev', '/api/surah.json');
+
+  final response = await http.get(url);
+  if (response.statusCode != 200) {
+    throw Exception('Failed to load Surah');
+  }
+
+  final data = jsonDecode(response.body);
+
+  final item = data[surahNumber - 1];
+
+  return Surah(
+    surahNumber,
+    item['surahName'],
+    item['surahNameArabic'],
+    '${item['revelationPlace']} · ${item['totalAyah']} verses',
+  );
+}
 
   Future<List<Ayah>> fetchSurahAyahs(int surahNumber) async {
     final url = Uri.https('quranapi.pages.dev', '/api/$surahNumber.json');

@@ -20,14 +20,11 @@ class Home extends StatefulWidget {
 }
 
 //everything thats left
-
-
-// the entire prayer page
 // add the notification system
-// add the bookmarking system for the quran page, connect to firebase
+
 // clean the code
 //fix ui in some places
-//fix the quran icon play button
+
 // possible: add all the sections's pages , like the ummah page, videos page, features page etc.
 // possible: implement the social features of ummah page and add likes and comments, and image uploads and connect to firebase
 // add something to the memorize section

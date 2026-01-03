@@ -92,7 +92,6 @@ class _SingupState extends State<Singup> {
     });
   }
 
-  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,86 +100,91 @@ class _SingupState extends State<Singup> {
         backgroundColor: const Color(0xFF2B2D30),
       ),
       backgroundColor: const Color(0xFF2B2D30),
-      body: Center(
-        child: Form(
-          key: k,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/logo1.png",
-                width: 300,
-                height: 300,
-              ),
-
-              // USERNAME
-              field(
-                controller: username,
-                icon: Icons.person,
-                hint: "Username",
-                validator: vUsername,
-              ),
-
-              const SizedBox(height: 16),
-
-              // EMAIL
-              field(
-                controller: email,
-                icon: Icons.email,
-                hint: "Email",
-                validator: vEmail,
-              ),
-
-              const SizedBox(height: 16),
-
-              // PASSWORD
-              field(
-                controller: password,
-                icon: Icons.lock,
-                hint: "Password",
-                obscure: true,
-                validator: vPassword,
-              ),
-
-              const SizedBox(height: 16),
-
-              // CONFIRM PASSWORD
-              field(
-                controller: confirmPassword,
-                icon: Icons.lock_outline,
-                hint: "Confirm Password",
-                obscure: true,
-                validator: (v) {
-                  if (v == null || v.isEmpty) {
-                    return "Confirm your password";
-                  }
-                  if (v != password.text) {
-                    return "Passwords do not match";
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 20),
-
-              TextButton(
-                onPressed: () => signupm(context),
-                style: TextButton.styleFrom(
-                  backgroundColor: const Color(0xFF229B91),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 100,
-                    vertical: 15,
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 100),
+        
+        child: Center(
+          child: Form(
+            key: k,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/logo1.png",
+                  width: 300,
+                  height: 300,
+                ),
+        
+                // USERNAME
+                field(
+                  controller: username,
+                  icon: Icons.person,
+                  hint: "Username",
+                  validator: vUsername,
+                ),
+        
+                const SizedBox(height: 16),
+        
+                // EMAIL
+                field(
+                  controller: email,
+                  icon: Icons.email,
+                  hint: "Email",
+                  validator: vEmail,
+                ),
+        
+                const SizedBox(height: 16),
+        
+                // PASSWORD
+                field(
+                  controller: password,
+                  icon: Icons.lock,
+                  hint: "Password",
+                  obscure: true,
+                  validator: vPassword,
+                ),
+        
+                const SizedBox(height: 16),
+        
+                // CONFIRM PASSWORD
+                field(
+                  controller: confirmPassword,
+                  icon: Icons.lock_outline,
+                  hint: "Confirm Password",
+                  obscure: true,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return "Confirm your password";
+                    }
+                    if (v != password.text) {
+                      return "Passwords do not match";
+                    }
+                    return null;
+                  },
+                ),
+        
+                const SizedBox(height: 20),
+        
+                TextButton(
+                  onPressed: () => signupm(context),
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFF229B91),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 100,
+                      vertical: 15,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
-                child: const Text(
-                  "Sign Up",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

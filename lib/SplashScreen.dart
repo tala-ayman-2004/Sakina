@@ -18,9 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
           tween: Tween(begin: 250, end: 300),
           duration: const Duration(seconds: 3),
           onEnd: () {
-            Navigator.of(
-              context,
-            ).pushReplacement(MaterialPageRoute(builder: (_) => const login()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => login()));
           },
           builder: (context, value, child) {
             return ClipRRect(

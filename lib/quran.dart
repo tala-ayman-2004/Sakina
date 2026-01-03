@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'chapters.dart';
 import 'Tajweed.dart';
+import 'bookmark.dart';
 
 class QuranHomePage extends StatelessWidget {
   const QuranHomePage({super.key});
@@ -99,7 +100,12 @@ class QuranHomePage extends StatelessWidget {
                       colors: [Color(0xFF7FAAF0), Color(0xFF5D87D8)],
                     ),
                     onTap: () {
-                      // Navigate to Bookmarks Page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BookmarksPage(),
+                        ),
+                      );
                     },
                   ),
                 ],

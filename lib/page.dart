@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sakina/services/API.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuranPage extends StatefulWidget {
   final Surah surah;
+  final int? initialAyah;
 
-  const QuranPage(this.surah, {super.key});
+  const QuranPage(this.surah, {this.initialAyah, super.key});
 
   @override
   State<QuranPage> createState() => _QuranPageState();
@@ -13,24 +16,21 @@ class QuranPage extends StatefulWidget {
 
 class _QuranPageState extends State<QuranPage> {
   late Future<List<Ayah>> _ayahsFuture;
-
-  // Audio players
   late AudioPlayer _surahPlayer;
   late AudioPlayer _ayahPlayer;
 
   bool _isSurahLoaded = false;
   int? _playingAyah;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
 
     _ayahsFuture = API().fetchSurahAyahs(widget.surah.number);
-
     _surahPlayer = AudioPlayer();
     _ayahPlayer = AudioPlayer();
 
-    // Reset ayah state when finished
     _ayahPlayer.playerStateStream.listen((state) {
       if (!mounted) return;
       if (state.processingState == ProcessingState.completed) {
@@ -44,9 +44,11 @@ class _QuranPageState extends State<QuranPage> {
     _surahPlayer.dispose();
     _ayahPlayer.dispose();
     super.dispose();
+    _scrollController.dispose();
   }
 
-  // ▶ Play / Resume full surah
+  // ================= AUDIO =================
+
   Future<void> _playSurah() async {
     try {
       if (_isSurahLoaded) {
@@ -57,38 +59,89 @@ class _QuranPageState extends State<QuranPage> {
       final url = await API().fetchAudioUrl(widget.surah.number);
       await _surahPlayer.setUrl(url);
       await _surahPlayer.play();
-
       _isSurahLoaded = true;
     } catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to play surah audio')),
-      );
+      _toast('Failed to play surah audio');
     }
   }
 
-  // ▶ Play single ayah
   Future<void> _playAyah(int ayahNumber) async {
     try {
-      // Toggle pause if same ayah
       if (_playingAyah == ayahNumber && _ayahPlayer.playing) {
         await _ayahPlayer.pause();
         setState(() => _playingAyah = null);
         return;
       }
 
-      final url =
-          await API().fetchverse(widget.surah.number, ayahNumber);
+      setState(() => _playingAyah = ayahNumber);
+
+      final url = await API().fetchverse(widget.surah.number, ayahNumber);
 
       await _ayahPlayer.setUrl(url);
       await _ayahPlayer.play();
-
-      setState(() => _playingAyah = ayahNumber);
     } catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to play ayah audio')),
-      );
+      setState(() => _playingAyah = null);
+      _toast('Failed to play ayah audio');
     }
   }
+
+  // ================= BOOKMARKS =================
+
+  Future<void> toggleBookmark(Ayah ayah) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null || user.isAnonymous) {
+      _toast('Create an account to save bookmarks');
+      return;
+    }
+
+    final docId = '${widget.surah.number}_${ayah.number}';
+
+    final ref = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('bookmarks')
+        .doc(docId);
+
+    final doc = await ref.get();
+
+    if (doc.exists) {
+      await ref.delete();
+    } else {
+      await ref.set({
+        'surahNumber': widget.surah.number,
+        'surahName': widget.surah.nameAr,
+        'ayahNumber': ayah.number,
+        'ayahText': ayah.ar,
+        'translation': ayah.eng,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  Stream<bool> isBookmarked(Ayah ayah) {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null || user.isAnonymous) {
+      return Stream<bool>.value(false);
+    }
+
+    final docId = '${widget.surah.number}_${ayah.number}';
+
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('bookmarks')
+        .doc(docId)
+        .snapshots()
+        .map((doc) => doc.exists);
+  }
+
+  void _toast(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  // ================= UI =================
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +171,6 @@ class _QuranPageState extends State<QuranPage> {
     );
   }
 
-  // 🔹 HEADER (unchanged UI)
   Widget _surahHeader() {
     return Container(
       width: double.infinity,
@@ -156,7 +208,6 @@ class _QuranPageState extends State<QuranPage> {
     );
   }
 
-  // ▶ Surah play / pause button
   Widget _bismillah() {
     return Column(
       children: [
@@ -172,23 +223,14 @@ class _QuranPageState extends State<QuranPage> {
         StreamBuilder<PlayerState>(
           stream: _surahPlayer.playerStateStream,
           builder: (context, snapshot) {
-            final state = snapshot.data;
-            final processing = state?.processingState;
-            final playing = state?.playing ?? false;
-
-            if (processing == ProcessingState.loading ||
-                processing == ProcessingState.buffering) {
-              return const CircularProgressIndicator(color: Colors.white);
-            }
-
+            final playing = snapshot.data?.playing ?? false;
             return IconButton(
               icon: Icon(
                 playing ? Icons.pause_circle : Icons.play_circle,
                 color: Colors.white,
                 size: 36,
               ),
-              onPressed:
-                  playing ? _surahPlayer.pause : _playSurah,
+              onPressed: playing ? _surahPlayer.pause : _playSurah,
             );
           },
         ),
@@ -196,37 +238,52 @@ class _QuranPageState extends State<QuranPage> {
     );
   }
 
-  // 📜 AYAH LIST
   Widget _ayahList() {
     return FutureBuilder<List<Ayah>>(
       future: _ayahsFuture,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(color: Color(0xFF229B91)),
           );
         }
 
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(
-              snapshot.error.toString(),
-              style: const TextStyle(color: Colors.white),
-            ),
-          );
+        final ayahs = snapshot.data!;
+        if (widget.initialAyah != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final index = ayahs.indexWhere(
+              (a) => a.number == widget.initialAyah,
+            );
+            if (index != -1 && _scrollController.hasClients) {
+              _scrollController.animateTo(
+                index * 140.0, // estimated tile height
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            }
+          });
         }
 
-        final ayahs = snapshot.data!;
-
         return ListView.separated(
+          controller: _scrollController,
           itemCount: ayahs.length,
           separatorBuilder: (_, __) => const Divider(height: 24),
           itemBuilder: (context, index) {
             final ayah = ayahs[index];
-            return _AyahTile(
-              ayah: ayah,
-              isPlaying: _playingAyah == ayah.number,
-              onPlay: () => _playAyah(ayah.number),
+
+            return StreamBuilder<bool>(
+              stream: isBookmarked(ayah),
+              builder: (context, snap) {
+                final bookmarked = snap.data ?? false;
+
+                return _AyahTile(
+                  ayah: ayah,
+                  isPlaying: _playingAyah == ayah.number,
+                  bookmarked: bookmarked,
+                  onPlay: () => _playAyah(ayah.number),
+                  onBookmark: () => toggleBookmark(ayah),
+                );
+              },
             );
           },
         );
@@ -235,16 +292,21 @@ class _QuranPageState extends State<QuranPage> {
   }
 }
 
-// 🔹 AYAH TILE (UI unchanged)
+// ================= AYAH TILE =================
+
 class _AyahTile extends StatelessWidget {
   final Ayah ayah;
   final bool isPlaying;
+  final bool bookmarked;
   final VoidCallback onPlay;
+  final VoidCallback onBookmark;
 
   const _AyahTile({
     required this.ayah,
     required this.isPlaying,
+    required this.bookmarked,
     required this.onPlay,
+    required this.onBookmark,
   });
 
   @override
@@ -283,7 +345,14 @@ class _AyahTile extends StatelessWidget {
             const SizedBox(width: 12),
             const Icon(Icons.share, size: 20, color: Colors.teal),
             const SizedBox(width: 12),
-            const Icon(Icons.bookmark_border, size: 20, color: Colors.teal),
+            IconButton(
+              icon: Icon(
+                bookmarked ? Icons.bookmark : Icons.bookmark_border,
+                size: 20,
+                color: Colors.teal,
+              ),
+              onPressed: onBookmark,
+            ),
           ],
         ),
         const SizedBox(height: 12),
