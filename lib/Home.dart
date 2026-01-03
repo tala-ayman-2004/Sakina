@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       bottomNavigationBar: AppFooter(
-        currentIndex: 1, 
+        currentIndex: 1,
         onTap: (index) {
           if (index == 1) return;
           if (index == 0) {
@@ -124,20 +124,6 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 20),
             _ummahSection(),
             const SizedBox(height: 40),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PrayerPage()),
-                  );
-                });
-              },
-              child: const Text(
-                "Load More",
-                style: TextStyle(color: Color(0xFF229B91)),
-              ),
-            ),
           ],
         ),
       ),
@@ -242,7 +228,6 @@ class _HomeState extends State<Home> {
 
               const SizedBox(height: 16),
 
-              // Prayer Times
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -382,11 +367,10 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Islamic Videos',
                 style: TextStyle(
                   color: Colors.white,
@@ -396,7 +380,7 @@ class _HomeState extends State<Home> {
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text(
+                child: Text(
                   'See all',
                   style: TextStyle(color: Color(0xFF229B91)),
                 ),
@@ -410,7 +394,7 @@ class _HomeState extends State<Home> {
             height: 210,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: const [
+              children: [
                 _YoutubeVideoCard(
                   videoId: 'aSmzRxLSuks',
                   title: 'رحلة الخلود 1',
@@ -440,7 +424,6 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -573,13 +556,11 @@ class _YoutubeVideoCard extends StatelessWidget {
   final String videoId;
   final String title;
   final String channel;
-  final bool isLive;
 
   const _YoutubeVideoCard({
     required this.videoId,
     required this.title,
     required this.channel,
-    this.isLive = false,
   });
 
   @override
@@ -603,45 +584,17 @@ class _YoutubeVideoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thumbnail
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
-                  child: Image.network(
-                    'https://img.youtube.com/vi/$videoId/hqdefault.jpg',
-                    height: 130,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                if (isLive)
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        'LIVE',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
+            
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
+              child: Image.network(
+                'https://img.youtube.com/vi/$videoId/hqdefault.jpg',
+                height: 130,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
 
             // Text
@@ -692,7 +645,7 @@ class _AssetVideoCardState extends State<_AssetVideoCard> {
 
     _controller = VideoPlayerController.asset('assets/videos/mecca_video.mp4')
       ..setLooping(true)
-      ..setVolume(0) // REQUIRED for autoplay on iOS
+      ..setVolume(0)
       ..initialize().then((_) {
         _controller.play();
         setState(() {});
@@ -709,22 +662,22 @@ class _AssetVideoCardState extends State<_AssetVideoCard> {
   Widget build(BuildContext context) {
     return Container(
       width: 350,
-      margin: const EdgeInsets.only(right: 16),
+      margin: EdgeInsets.only(right: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E1E),
+        color: Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            borderRadius: BorderRadius.all(Radius.circular(16)),
             child: _controller.value.isInitialized
                 ? AspectRatio(
                     aspectRatio: _controller.value.aspectRatio,
                     child: VideoPlayer(_controller),
                   )
-                : const SizedBox(
+                : SizedBox(
                     height: 130,
                     child: Center(child: CircularProgressIndicator()),
                   ),

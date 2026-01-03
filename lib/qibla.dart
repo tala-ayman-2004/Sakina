@@ -34,7 +34,7 @@ class _QiblaCompassPageState extends State<QiblaCompassPage> {
     final position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-
+    
     final bearing = calculateQiblaDirection(
       latitude: position.latitude,
       longitude: position.longitude,
@@ -86,7 +86,7 @@ class _QiblaCompassPageState extends State<QiblaCompassPage> {
                   child: Center(
                     child: Transform.rotate(
                       angle: rotation,
-                      child: const Icon(
+                      child:  Icon(
                         Icons.navigation,
                         size: 120,
                         color: Color(0xFF229B91),

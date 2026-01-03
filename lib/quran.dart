@@ -29,7 +29,6 @@ class QuranHomePage extends StatelessWidget {
           children: [
             const SizedBox(height: 10),
 
-            // Quran Illustration
             Image.asset(
               'assets/images/quran_icon.png',
               height: 120,
@@ -37,16 +36,14 @@ class QuranHomePage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Last Read Card
             _LastReadCard(
               onTap: () {
-                // Navigate to Last Read Page
+            
               },
             ),
 
-            const SizedBox(height: 20),
+             SizedBox(height: 20),
 
-            // Feature Grid
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
@@ -56,14 +53,14 @@ class QuranHomePage extends StatelessWidget {
                   _FeatureCard(
                     title: 'Quran',
                     icon: Icons.menu_book,
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       colors: [Color(0xFF6BC7C2), Color(0xFF4CA6A1)],
                     ),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const QuranChaptersPage(),
+                          builder: (context) =>  QuranChaptersPage(),
                         ),
                       );
                     },
@@ -71,11 +68,10 @@ class QuranHomePage extends StatelessWidget {
                   _FeatureCard(
                     title: 'Memorize',
                     icon: Icons.nightlight_round,
-                    gradient: const LinearGradient(
+                    gradient:  LinearGradient(
                       colors: [Color(0xFFF38EB0), Color(0xFFEA6A9E)],
                     ),
                     onTap: () {
-                      // Navigate to Memorize Page
                     },
                   ),
                   _FeatureCard(

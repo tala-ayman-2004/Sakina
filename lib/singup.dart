@@ -30,7 +30,6 @@ class _SingupState extends State<Singup> {
       User? user = cred.user;
 
       if (user != null) {
-        // Store user in Firestore
         await FirebaseFirestore.instance
             .collection("users")
             .doc(user.uid)
@@ -117,51 +116,100 @@ class _SingupState extends State<Singup> {
                 ),
         
                 // USERNAME
-                field(
-                  controller: username,
-                  icon: Icons.person,
-                  hint: "Username",
-                  validator: vUsername,
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: TextFormField(
+                    
+                    controller: username,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.person, color: Colors.grey[600]),
+                      hintText: "Username",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator: vUsername,
+                  ),
                 ),
         
                 const SizedBox(height: 16),
         
                 // EMAIL
-                field(
-                  controller: email,
-                  icon: Icons.email,
-                  hint: "Email",
-                  validator: vEmail,
+                SizedBox(
+                  width: 300,
+                  height: 50,
+                  child: TextFormField(
+                    controller: email,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email, color: Colors.grey[600]),
+                      hintText: "Email",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator: vEmail,
+                  ),
                 ),
         
                 const SizedBox(height: 16),
         
                 // PASSWORD
-                field(
-                  controller: password,
-                  icon: Icons.lock,
-                  hint: "Password",
-                  obscure: true,
-                  validator: vPassword,
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: TextFormField(
+                    controller: password,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock, color: Colors.grey[600]),
+                      hintText: "Password",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: vPassword,
+                  ),
                 ),
         
                 const SizedBox(height: 16),
         
                 // CONFIRM PASSWORD
-                field(
-                  controller: confirmPassword,
-                  icon: Icons.lock_outline,
-                  hint: "Confirm Password",
-                  obscure: true,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) {
-                      return "Confirm your password";
-                    }
-                    if (v != password.text) {
-                      return "Passwords do not match";
-                    }
-                    return null;
-                  },
+                SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: TextFormField(
+                    controller: confirmPassword,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[600]),
+                      hintText: "Confirm Password",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    obscureText: true,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return "Confirm your password";
+                      }
+                      if (v != password.text) {
+                        return "Passwords do not match";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
         
                 const SizedBox(height: 20),
@@ -190,38 +238,9 @@ class _SingupState extends State<Singup> {
       ),
     );
   }
-
-  // ================= FIELD BUILDER =================
-  Widget field({
-    required TextEditingController controller,
-    required IconData icon,
-    required String hint,
-    required String? Function(String?) validator,
-    bool obscure = false,
-  }) {
-    return SizedBox(
-      height: 50,
-      width: 300,
-      child: TextFormField(
-        controller: controller,
-        validator: validator,
-        obscureText: obscure,
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Colors.grey[600]),
-          hintText: hint,
-          filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-// ================= VALIDATORS =================
+
 String? vUsername(String? v) {
   if (v == null || v.trim().length < 3) {
     return "Username must be at least 3 characters";

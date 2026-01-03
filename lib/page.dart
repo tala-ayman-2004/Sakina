@@ -47,7 +47,6 @@ class _QuranPageState extends State<QuranPage> {
     _scrollController.dispose();
   }
 
-  // ================= AUDIO =================
 
   Future<void> _playSurah() async {
     try {
@@ -85,7 +84,6 @@ class _QuranPageState extends State<QuranPage> {
     }
   }
 
-  // ================= BOOKMARKS =================
 
   Future<void> toggleBookmark(Ayah ayah) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -141,7 +139,6 @@ class _QuranPageState extends State<QuranPage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
-  // ================= UI =================
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +253,7 @@ class _QuranPageState extends State<QuranPage> {
             );
             if (index != -1 && _scrollController.hasClients) {
               _scrollController.animateTo(
-                index * 140.0, // estimated tile height
+                index * 140.0, 
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
               );
@@ -292,7 +289,6 @@ class _QuranPageState extends State<QuranPage> {
   }
 }
 
-// ================= AYAH TILE =================
 
 class _AyahTile extends StatelessWidget {
   final Ayah ayah;
@@ -333,7 +329,7 @@ class _AyahTile extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(),
+             Spacer(),
             IconButton(
               icon: Icon(
                 isPlaying ? Icons.pause_circle : Icons.play_circle,
@@ -342,9 +338,9 @@ class _AyahTile extends StatelessWidget {
               ),
               onPressed: onPlay,
             ),
-            const SizedBox(width: 12),
-            const Icon(Icons.share, size: 20, color: Colors.teal),
-            const SizedBox(width: 12),
+             SizedBox(width: 12),
+             Icon(Icons.share, size: 20, color: Colors.teal),
+             SizedBox(width: 12),
             IconButton(
               icon: Icon(
                 bookmarked ? Icons.bookmark : Icons.bookmark_border,
@@ -355,7 +351,7 @@ class _AyahTile extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+         SizedBox(height: 12),
         Text(
           ayah.ar,
           textAlign: TextAlign.right,

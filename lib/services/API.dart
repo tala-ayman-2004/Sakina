@@ -47,7 +47,7 @@ class API {
 
   Future<Map<String, String>> getTodayPrayerTimes() async {
     final position = await loc();
-
+    
     final today = DateTime.now();
     final date = '${today.day}-${today.month}-${today.year}';
 
@@ -165,13 +165,10 @@ class API {
     }
 
     final data = jsonDecode(response.body);
-
     final arabic = data['arabic1'] as List;
     final english = data['english'] as List;
 
-    final length = arabic.length < english.length
-        ? arabic.length
-        : english.length;
+    final length = arabic.length ;
 
     List<Ayah> ayahs = [];
 

@@ -94,7 +94,6 @@ class _MosqueTile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
-      // Mosque name
       title: Text(
         m.name,
         style: const TextStyle(
@@ -104,7 +103,6 @@ class _MosqueTile extends StatelessWidget {
         ),
       ),
 
-      // Address + distance
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -120,7 +118,6 @@ class _MosqueTile extends StatelessWidget {
         ],
       ),
 
-      // Navigation button ONLY
       trailing: IconButton(
         icon: const Icon(
           Icons.navigation,

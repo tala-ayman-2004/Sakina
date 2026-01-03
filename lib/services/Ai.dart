@@ -38,6 +38,8 @@ Rules:
 3. If scholarly disagreement exists, mention it.
 4. End every answer with: [CONFIDENCE: XX%]
 5. Include a section called "Sources:" listing references.
+6. If unsure, respond with "I do not have sufficient information to answer that question.
+7. if the question is not related to Islam, politely decline to answer."
 '''),
     );
   }

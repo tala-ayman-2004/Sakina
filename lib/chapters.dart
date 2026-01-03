@@ -47,7 +47,6 @@ class _QuranChaptersPageState extends State<QuranChaptersPage> {
     );
   }
 
-  // 🔍 Search bar (UNCHANGED)
   Widget _searchBar() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -65,7 +64,6 @@ class _QuranChaptersPageState extends State<QuranChaptersPage> {
     );
   }
 
-  // 📜 Surah List (API connected, SAME UI)
   Widget _surahList() {
     return FutureBuilder<List<Surah>>(
       future: _surahsFuture,
@@ -96,7 +94,7 @@ class _QuranChaptersPageState extends State<QuranChaptersPage> {
               number: surah.number,
               nameEn: surah.nameEn,
               nameAr: surah.nameAr,
-              info: surah.info, // ✅ from API
+              info: surah.info, 
               onTap: () {
                 Navigator.push(
                   context,

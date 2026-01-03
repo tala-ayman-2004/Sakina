@@ -21,10 +21,7 @@ class _loginState extends State<login> {
     try {
       await FirebaseAuth.instance.signInAnonymously();
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const Home()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
     } catch (e) {
       ScaffoldMessenger.of(
         context,
@@ -32,7 +29,6 @@ class _loginState extends State<login> {
     }
   }
 
-  // ================= LOGIN =================
   Future<void> loginUser(BuildContext context) async {
     if (!k.currentState!.validate()) return;
 
@@ -56,10 +52,7 @@ class _loginState extends State<login> {
         return;
       }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
     } on FirebaseAuthException catch (e) {
       String msg = "Login failed";
 
@@ -75,7 +68,6 @@ class _loginState extends State<login> {
     }
   }
 
-  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,7 +84,6 @@ class _loginState extends State<login> {
               children: [
                 Image.asset("assets/images/logo1.png", width: 300, height: 300),
         
-                // EMAIL
                 SizedBox(
                   height: 50,
                   width: 300,
@@ -219,7 +210,6 @@ class _loginState extends State<login> {
   }
 }
 
-// ================= VALIDATORS =================
 String? vEmail(String? v) {
   if (v == null || v.isEmpty) return "Email is required";
   if (!v.contains("@") || !v.contains(".")) {
