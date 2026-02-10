@@ -28,53 +28,58 @@ class _PasswordState extends State<Password> {
         backgroundColor: const Color(0xFF2B2D30),
       ),
       backgroundColor: const Color(0xFF2B2D30),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image(
-              image: AssetImage("assets/images/logo1.png"),
-              width: 300,
-              height: 300,
-            ),
-            SizedBox(
-              height: 50,
-              width: 300,
-              child: TextFormField(
-                controller: email,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email, color: Colors.grey[600]),
-                  hintText: 'Enter your Email',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
+      resizeToAvoidBottomInset: true,
+      body:
+       SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage("assets/images/logo1.png"),
+                width: 300,
+                height: 300,
+              ),
+              SizedBox(
+                height: 50,
+                width: 300,
+                child: TextFormField(
+                  controller: email,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.email, color: Colors.grey[600]),
+                    hintText: 'Enter your Email',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            TextButton(
-              onPressed: () {
-                sendResetEmail();
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: Color(0xFF229B91),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 100,
-                  vertical: 15,
+              const SizedBox(height: 16.0),
+              TextButton(
+                onPressed: () {
+                  sendResetEmail();
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Color(0xFF229B91),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 100,
+                    vertical: 15,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                child: const Text(
+                  'send a reset link',
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
               ),
-              child: const Text(
-                'send a reset link',
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

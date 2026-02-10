@@ -83,6 +83,9 @@ class _NurChatPageState extends State<NurChatPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF0B1220),
       appBar: AppBar(
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon: const Icon(Icons.arrow_back, color: Colors.white)),
         backgroundColor: const Color(0xFF0B1220),
         elevation: 0,
         title: Row(

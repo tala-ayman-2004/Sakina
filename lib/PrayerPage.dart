@@ -16,7 +16,6 @@ class PrayerPage extends StatefulWidget {
   State<PrayerPage> createState() => _PrayerPageState();
 }
 
-/* ------------------ DATE HELPERS ------------------ */
 
 List<DateTime> last7Days() {
   final today = DateTime.now();
@@ -38,7 +37,6 @@ String dayLabel(DateTime date) {
   return days[date.weekday - 1];
 }
 
-/* ------------------ STATE ------------------ */
 
 class _PrayerPageState extends State<PrayerPage> {
   PrayerPhase currentPhase = PrayerPhase.fajr;
@@ -50,7 +48,6 @@ class _PrayerPageState extends State<PrayerPage> {
     _initCurrentPrayerPhase();
   }
 
-  /* ------------------ PRAYER TIME LOGIC ------------------ */
 
   Future<void> _initCurrentPrayerPhase() async {
     final api = API();
@@ -96,7 +93,6 @@ class _PrayerPageState extends State<PrayerPage> {
     });
   }
 
-  /* ------------------ FIRESTORE ------------------ */
 
   Future<void> markPrayerAsPrayed(PrayerPhase phase) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -122,7 +118,6 @@ class _PrayerPageState extends State<PrayerPage> {
     });
   }
 
-  /* ------------------ BUTTON HANDLER ------------------ */
 
   Future<void> _onPrayNowPressed() async {
     if (prayDisabled) return;
@@ -136,16 +131,15 @@ class _PrayerPageState extends State<PrayerPage> {
     });
   }
 
-  /* ------------------ UI (UNCHANGED) ------------------ */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF2B2D30),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF2B2D30),
         elevation: 0,
-        leading: const BackButton(color: Colors.white),
         title: const Text(
           'Prayer',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -153,7 +147,7 @@ class _PrayerPageState extends State<PrayerPage> {
         centerTitle: true,
       ),
       bottomNavigationBar: AppFooter(
-        currentIndex: 1,
+        currentIndex: 0,
         onTap: (index) {
           if (index == 0) return;
           if (index == 1) {
@@ -183,7 +177,6 @@ class _PrayerPageState extends State<PrayerPage> {
             child: Column(
               children: [
                 const SizedBox(height: 24),
-                // 🌙 MOON + PRAYERS
                 SizedBox(
                   height: 340,
                   child: Center(
@@ -267,7 +260,6 @@ class _PrayerPageState extends State<PrayerPage> {
   }
 }
 
-// 🌙 Moon widget
 class Moon extends StatelessWidget {
   final PrayerPhase phase;
 
@@ -295,7 +287,6 @@ class Moon extends StatelessWidget {
   }
 }
 
-// 🔘 Prayer dot around moon
 class _PrayerOrbitItem extends StatelessWidget {
   final String label;
   final bool active;
@@ -352,11 +343,11 @@ const Map<PrayerPhase, MoonColors> moonThemeByPrayer = {
   ], Color(0xFFFFB74D)),
   PrayerPhase.maghrib: MoonColors(
     [
-      Color(0xFFFFC46B), // soft amber highlight
-      Color(0xFFFF8F1F), // deep sunset orange
-      Color(0xFFB45309), // dark burnt orange core
+      Color(0xFFFFC46B), 
+      Color(0xFFFF8F1F),
+      Color(0xFFB45309), 
     ],
-    Color(0xFFFF8F1F), // glow
+    Color(0xFFFF8F1F), 
   ),
 
   PrayerPhase.isha: MoonColors([
@@ -367,7 +358,7 @@ const Map<PrayerPhase, MoonColors> moonThemeByPrayer = {
 };
 
 class PrayerProgressRing extends StatelessWidget {
-  final int completed; // 0–5
+  final int completed;
   final bool isToday;
 
   const PrayerProgressRing({
@@ -457,7 +448,6 @@ class WeeklyPrayerProgress extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              // Map Firestore docs by date id
               final Map<String, Map<String, dynamic>> dataByDay = {
                 for (var doc in snapshot.data!.docs)
                   doc.id: doc.data() as Map<String, dynamic>,
@@ -477,7 +467,6 @@ class WeeklyPrayerProgress extends StatelessWidget {
 
                   return Column(
                     children: [
-                      // Day name
                       Text(
                         dayLabel(date),
                         style: const TextStyle(
@@ -489,7 +478,6 @@ class WeeklyPrayerProgress extends StatelessWidget {
 
                       const SizedBox(height: 2),
 
-                      // Day number
                       Text(
                         date.day.toString(),
                         style: TextStyle(
@@ -501,7 +489,6 @@ class WeeklyPrayerProgress extends StatelessWidget {
 
                       const SizedBox(height: 6),
 
-                      // Progress ring
                       PrayerProgressRing(
                         completed: completed,
                         isToday: isToday,

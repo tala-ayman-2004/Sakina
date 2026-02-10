@@ -56,7 +56,7 @@ class _QiblaCompassPageState extends State<QiblaCompassPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF2B2D30),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2B2D30),
+        backgroundColor: const Color(0xFF229B91),
         title: const Text('Qibla Compass'),
       ),
       body: Center(

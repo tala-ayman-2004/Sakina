@@ -42,12 +42,13 @@ class API {
 
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
+
     );
   }
 
   Future<Map<String, String>> getTodayPrayerTimes() async {
     final position = await loc();
-    
+  
     final today = DateTime.now();
     final date = '${today.day}-${today.month}-${today.year}';
 

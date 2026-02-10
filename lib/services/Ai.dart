@@ -22,7 +22,7 @@ class Source {
 class IslamicAiService {
   late final GenerativeModel _model;
 
-  static const String _apiKey = 'AIzaSyCuftzWpEJUMALnZon3FaAAi0r9Y073O7g';
+  static const String _apiKey = '// Your Google Generative AI API key here';
 
   IslamicAiService() {
     _model = GenerativeModel(

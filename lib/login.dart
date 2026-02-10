@@ -83,7 +83,6 @@ class _loginState extends State<login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset("assets/images/logo1.png", width: 300, height: 300),
-        
                 SizedBox(
                   height: 50,
                   width: 300,
@@ -157,7 +156,6 @@ class _loginState extends State<login> {
                         'Continue as Guest',
                         style: TextStyle(
                           color: Colors.white,
-                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
@@ -220,8 +218,8 @@ String? vEmail(String? v) {
 
 String? vPassword(String? v) {
   if (v == null || v.isEmpty) return "Password is required";
-  if (v.length < 8) {
-    return "Password must be at least 8 characters";
+  if (v.length < 6) {
+    return "Password must be at least 6 characters";
   }
   return null;
 }

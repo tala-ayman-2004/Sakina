@@ -258,8 +258,8 @@ String? vEmail(String? v) {
 
 String? vPassword(String? v) {
   if (v == null || v.isEmpty) return "Password is required";
-  if (v.length < 8) {
-    return "Password must be at least 8 characters";
+  if (v.length < 6) {
+    return "Password must be at least 6 characters";
   }
   return null;
 }
